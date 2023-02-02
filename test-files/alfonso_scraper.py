@@ -3,6 +3,43 @@ from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 import requests
 from utils.response import Response
+import re
+
+def countWords(text):
+    #create a map and read file containing past word frequencies
+    wordFreq = {}
+    with open("words.txt", "r") as f:
+        lines = f.readlines()
+        for line in lines:
+            word_count = re.findall("\w+", line)
+            # File words.txt format is word <space> num
+            wordFreq[word_count[0]] = int(word_count[1])
+    f.close()
+
+    # After file is read proceed to add/update words and their counts
+    tokens = re.findall('\w+', text)
+    for token in tokens:
+        token = token.lower()
+        if token not in words:
+            words[token] = 0
+        words[token] += 1
+    
+    # Sort the dictionary by value. if there is a tie, by alphabetical
+    words = dict(sorted(words.items(), key = lambda key: key[0], 
+    reverse=True))
+    words = dict(sorted(words.items(), key = lambda item: item[1], 
+    reverse=True))
+    
+    # Overwrite to the file starting with words with highest freq
+    with open("words.txt", "w") as f:
+        for line in words:
+            f.write(line)
+            f.write(" ")
+            f.write(words[line])
+            f.write("\n")
+    f.close()
+    
+    
 
 def scraper(url, resp):
     links = extract_next_links(url, resp)
@@ -28,9 +65,13 @@ def extract_next_links(url, resp):
         prev_urls[line.strip()] = 1
     f.close()
 
-    #parse webpage and find all links 
+    #parse webpage and find all links and text
     soup = BeautifulSoup(resp.raw_response.content, 'html.parser')
     links = soup.find_all("a", href=True)
+    text = soup.getText()
+
+    # Count the number of words and their freqs 
+    countWords(text)
 
     # We will use the is_valid url function in this loop to make sure
     # we do not add bad urls or previously visited urls. 
