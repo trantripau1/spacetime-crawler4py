@@ -8,6 +8,7 @@ def scraper(url, resp):
     links = extract_next_links(url, resp)
     return [link for link in links if is_valid(link)]
 
+#reponse = servers reponse to the HTTP request.
 def extract_next_links(url, resp):
     # Implementation required.
     # url: the URL that was used to get the page
@@ -18,11 +19,35 @@ def extract_next_links(url, resp):
     #         resp.raw_response.url: the url, again
     #         resp.raw_response.content: the content of the page!
     # Return a list with the hyperlinks (as strings) scrapped from resp.raw_response.content
-    urls = []
+
+    #create a prev_urls to read in stored links from previous searches.
+    prev_urls = {}
+    with open("urls.txt", "r") as f:
+    lines = f.readlines()
+    for line in lines:
+        prev_urls[line.strip()] = 1
+    f.close()
+
+    #parse webpage and find all links 
     soup = BeautifulSoup(resp.raw_response.content, 'html.parser')
-    for link in soup.find_all('a'):
-        urls.append(link.get('href'))
-    return urls
+    links = soup.find_all("a", href=True)
+
+    # We will use the is_valid url function in this loop to make sure
+    # we do not add bad urls or previously visited urls. 
+    # we create a new_urls to store
+    new_urls = {}
+    for link in links:
+        str_link = link.get('href')
+        if str_link not in urls and str_link not in new_urls:
+            new_urls[str_link] = 1
+    
+    # Open file again and denote to append to the urls.txt file
+    with open('urls.txt', 'a') as f:
+        for line in new_urls:
+            f.write(line)
+            f.write('\n')
+    f.close()
+    return new_urls
 
 def is_valid(url):
     # Decide whether to crawl this url or not. 
