@@ -5,7 +5,7 @@ import requests
 from utils.response import Response
 import re
 
-def countWords(text):
+def mostCommon(text):
     #create a map and read file containing past word frequencies
     wordFreq = {}
     with open("words.txt", "r") as f:
@@ -78,8 +78,8 @@ def extract_next_links(url, resp):
     links = soup.find_all("a", href=True)
     text = soup.getText()
 
-    # Count the number of words and their freqs 
-    countWords(text)
+    # returns most top 50 most common words thus far.
+    top50 = mostCommon(text)
 
     # We will use the is_valid url function in this loop to make sure
     # we do not add bad urls or previously visited urls. 
