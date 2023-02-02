@@ -29,7 +29,7 @@ def countWords(text):
     reverse=True))
     words = dict(sorted(words.items(), key = lambda item: item[1], 
     reverse=True))
-    
+
     # Overwrite to the file starting with words with highest freq
     with open("words.txt", "w") as f:
         for line in words:
@@ -39,7 +39,15 @@ def countWords(text):
             f.write("\n")
     f.close()
     
-    
+    # Creates a list of the top 50 most common words
+    top50 = []
+    i = 0
+    for key in words:
+        if i == 50:
+            break
+        top50.append(key)
+        i += 1
+    return top50
 
 def scraper(url, resp):
     links = extract_next_links(url, resp)
