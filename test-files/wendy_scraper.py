@@ -28,9 +28,13 @@ def is_valid(url):
     # Decide whether to crawl this url or not. 
     # If you decide to crawl it, return True; otherwise return False.
     # There are already some conditions that return False.
+
+
     try:
         parsed = urlparse(url)
         if parsed.scheme not in set(["http", "https"]):
+            return False
+        if not parsed.hostname.endswith(('ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', '.stat.uci.edu')):
             return False
         return not re.match(
             r".*\.(css|js|bmp|gif|jpe?g|ico"
@@ -46,10 +50,10 @@ def is_valid(url):
         print ("TypeError for ", parsed)
         raise
 
-if __name__ == '__main__':
-    url = 'https://www.ics.uci.edu'
-    resp = requests.get(url)
+#if __name__ == '__main__':
+    #url = 'https://www.ics.uci.edu'
+    #resp = requests.get(url)
     #print(type(resp.content))
-    print(resp.content["url"])
+    #print(resp.content["url"])
     #new_resp = Response(resp.content)
     #print(scraper(url, resp))
