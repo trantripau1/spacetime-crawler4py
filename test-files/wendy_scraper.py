@@ -118,7 +118,7 @@ def extract_next_links(url, resp):
     new_urls = {}
     for link in links:
         str_link = link.get('href')
-        if str_link not in urls and str_link not in new_urls:
+        if str_link not in prev_urls and str_link not in new_urls:
             new_urls[str_link] = 1
     
     # Open file again and denote to append to the urls.txt file
@@ -129,7 +129,7 @@ def extract_next_links(url, resp):
     f.close()
 
     # Store total unique pages
-    totalUniquePages = len(old_urls.update(new_urls))
+    totalUniquePages = len(prev_urls.update(new_urls))
     with open("uniquePages.txt", 'w') as f:
         f.write(totalUniquePages)
     
@@ -143,6 +143,8 @@ def is_valid(url):
     try:
         parsed = urlparse(url)
         if parsed.scheme not in set(["http", "https"]):
+            return False
+        if not parsed.hostname.endswith(('ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', '.stat.uci.edu')):
             return False
         return not re.match(
             r".*\.(css|js|bmp|gif|jpe?g|ico"
