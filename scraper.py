@@ -32,13 +32,13 @@ def tolkiens(text):
 
 def mostCommon(text):
     #create a map and read file containing past word frequencies
-    wordFreq = {}
+    words = {}
     with open("words.txt", "r") as f:
         lines = f.readlines()
         for line in lines:
             word_count = re.findall("\w+", line)
             # File words.txt format is word <space> num
-            wordFreq[word_count[0]] = int(word_count[1])
+            words[word_count[0]] = int(word_count[1])
     f.close()
 
     # After file is read proceed to add/update words and their counts
