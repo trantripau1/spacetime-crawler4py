@@ -23,22 +23,13 @@ def longestPage(url, text)
 
 # Tokenizes alphanumeric characters, ignoring non-english words
 def tolkiens(text):
-    file_words = [] 
-    try:
-        with open(TextFilePath, 'r') as f: #"with open" to not have to have all lines loaded in RAM at once.
-            for line in f: 
-                line = re.split("[\W_À-ÖØ-öø-ÿ]+", line) #Split on nonalphanumerics to create list of words in line.
-                for word in line: 
-                    token = word.lower() #Make lowercase so the capitalization does not matter.
-                    if token != '' and token.isascii() == True:
-                        file_words.append(token) #Adds to list
-    except FileNotFoundError:
-        print("Error: The file " + TextFilePath + " does not exist.")
-    except UnicodeDecodeError:
-        print('Error: The file ' + TextFilePath + " is not compatible. Use a .txt file.")
-    except IsaDirectoryError:
-        print("Error: " + TextFilePath + " is a directory.")
-    return file_words
+    text_words = [] 
+    text = re.split("[\W_À-ÖØ-öø-ÿ]+", text) #Split on nonalphanumerics to create list of words in line.
+    for word in text: 
+        token = word.lower() #Make lowercase so the capitalization does not matter.
+        if token != '' and token.isascii() == True:
+            text_words.append(token) #Adds to list
+    return text_words
 
 def mostCommon(text):
     #create a map and read file containing past word frequencies
@@ -108,9 +99,12 @@ def extract_next_links(url, resp):
     f.close()
 
     #parse webpage and find all links and text
-    soup = BeautifulSoup(resp.raw_response.content, 'html.parser')
-    links = soup.find_all("a", href=True)
-    text = soup.getText()
+    if resp.status == 200:
+        soup = BeautifulSoup(resp.raw_response.content, 'html.parser')
+        links = soup.find_all("a", href=True)
+        text = soup.getText()
+    else:
+        return
 
     # returns most top 50 most common words thus far.
     top50 = mostCommon(text)
@@ -124,6 +118,9 @@ def extract_next_links(url, resp):
     new_urls = {}
     for link in links:
         str_link = link.get('href')
+        x = urlparse.urldefrag(str_link)
+        str_link = x[0]
+        if str_link not in new_urls and str_link not in new_urls:
         if str_link not in urls and str_link not in new_urls:
             new_urls[str_link] = 1
     
@@ -135,7 +132,7 @@ def extract_next_links(url, resp):
     f.close()
 
     # Store total unique pages
-    totalUniquePages = len(old_urls.update(new_urls))
+    totalUniquePages = len(prev_urls.update(new_urls))
     with open("uniquePages.txt", 'w') as f:
         f.write(totalUniquePages)
     
@@ -149,6 +146,8 @@ def is_valid(url):
     try:
         parsed = urlparse(url)
         if parsed.scheme not in set(["http", "https"]):
+            return False
+        if not parsed.hostname.endswith(('ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', '.stat.uci.edu')):
             return False
         return not re.match(
             r".*\.(css|js|bmp|gif|jpe?g|ico"
