@@ -120,8 +120,7 @@ def extract_next_links(url, resp):
         str_link = link.get('href')
         x = urlparse.urldefrag(str_link)
         str_link = x[0]
-        if str_link not in new_urls and str_link not in new_urls:
-        if str_link not in urls and str_link not in new_urls:
+        if str_link not in prev_urls and str_link not in new_urls:
             new_urls[str_link] = 1
     
     # Open file again and denote to append to the urls.txt file
@@ -162,11 +161,3 @@ def is_valid(url):
     except TypeError:
         print ("TypeError for ", parsed)
         raise
-
-if __name__ == '__main__':
-    url = 'https://www.ics.uci.edu'
-    resp = requests.get(url)
-    #print(type(resp.content))
-    print(resp.content["url"])
-    #new_resp = Response(resp.content)
-    #print(scraper(url, resp))

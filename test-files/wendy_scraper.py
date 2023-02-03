@@ -118,8 +118,7 @@ def extract_next_links(url, resp):
         str_link = link.get('href')
         x = urlparse.urldefrag(str_link)
         str_link = x[0]
-        if str_link not in new_urls and str_link not in new_urls:
-            if str_link not in prev_urls and str_link not in new_urls:
+        if str_link not in prev_urls and str_link not in new_urls:
                 new_urls[str_link] = 1
     
     # Open file again and denote to append to the urls.txt file
