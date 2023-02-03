@@ -5,6 +5,41 @@ import requests
 from utils.response import Response
 import re
 
+# Counts the number of words on the current webpage and writes to longestPage.txt
+# IFF the current webpage has more words based off the tolkiens function
+def longestPage(url, text)
+    tokens = tolkiens(text)
+    with open("longestPage.txt", "+") as f:
+        line = f.readlines()
+        record = re.findall("\w+", line)
+    
+    if len(tokens) > int(record[1]):
+        f.write(url)
+        f.write(" ")
+        f.write(len(tokens))
+        record = [url, len(tokens)]
+    f.close()
+    return record
+
+# Tokenizes alphanumeric characters, ignoring non-english words
+def tolkiens(text):
+    file_words = [] 
+    try:
+        with open(TextFilePath, 'r') as f: #"with open" to not have to have all lines loaded in RAM at once.
+            for line in f: 
+                line = re.split("[\W_À-ÖØ-öø-ÿ]+", line) #Split on nonalphanumerics to create list of words in line.
+                for word in line: 
+                    token = word.lower() #Make lowercase so the capitalization does not matter.
+                    if token != '' and token.isascii() == True:
+                        file_words.append(token) #Adds to list
+    except FileNotFoundError:
+        print("Error: The file " + TextFilePath + " does not exist.")
+    except UnicodeDecodeError:
+        print('Error: The file ' + TextFilePath + " is not compatible. Use a .txt file.")
+    except IsaDirectoryError:
+        print("Error: " + TextFilePath + " is a directory.")
+    return file_words
+
 def mostCommon(text):
     #create a map and read file containing past word frequencies
     wordFreq = {}
@@ -17,9 +52,8 @@ def mostCommon(text):
     f.close()
 
     # After file is read proceed to add/update words and their counts
-    tokens = re.findall('\w+', text)
-    for token in tokens:
-        token = token.lower()
+    tokenList = tolkiens(text)
+    for token in tokenList:
         if token not in words:
             words[token] = 0
         words[token] += 1
@@ -81,6 +115,9 @@ def extract_next_links(url, resp):
     # returns most top 50 most common words thus far.
     top50 = mostCommon(text)
 
+    # Returns the url with the most words
+    url_with_most_words = longestPage(resp.url, text)
+
     # We will use the is_valid url function in this loop to make sure
     # we do not add bad urls or previously visited urls. 
     # we create a new_urls to store
@@ -96,6 +133,13 @@ def extract_next_links(url, resp):
             f.write(line)
             f.write('\n')
     f.close()
+
+    # Store total unique pages
+    totalUniquePages = len(old_urls.update(new_urls))
+    with open("uniquePages.txt", 'w') as f:
+        f.write(totalUniquePages)
+    
+
     return new_urls
 
 def is_valid(url):
