@@ -1,7 +1,6 @@
 import re
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
-import requests
 from utils.response import Response
 import re
 
@@ -96,7 +95,6 @@ def extract_next_links(url, resp):
         lines = f.readlines()
         for line in lines:
             prev_urls[line.strip()] = 1
-    f.close()
 
     #parse webpage and find all links and text
     if resp.status == 200:
@@ -118,8 +116,11 @@ def extract_next_links(url, resp):
     new_urls = {}
     for link in links:
         str_link = link.get('href')
-        if str_link not in prev_urls and str_link not in new_urls:
-            new_urls[str_link] = 1
+        x = urlparse.urldefrag(str_link)
+        str_link = x[0]
+        if str_link not in new_urls and str_link not in new_urls:
+            if str_link not in prev_urls and str_link not in new_urls:
+                new_urls[str_link] = 1
     
     # Open file again and denote to append to the urls.txt file
     with open('urls.txt', 'a') as f:
