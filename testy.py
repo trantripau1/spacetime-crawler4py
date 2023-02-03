@@ -30,6 +30,3 @@ if not re.search(
     print("Not found!")
 else:
     print("Found!")
-
-
-#print(re.search(r'/pdf/', parsed.path.lower()))
