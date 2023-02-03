@@ -3,75 +3,7 @@ from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 from utils.response import Response
 import re
-
-# Counts the number of words on the current webpage and writes to longestPage.txt
-# IFF the current webpage has more words based off the tolkiens function
-def longestPage(url, text):
-    tokens = tolkiens(text)
-    with open("longestPage.txt", "+") as f:
-        line = f.readlines()
-        record = re.findall("\w+", line)
-    
-    if len(tokens) > int(record[1]):
-        f.write(url)
-        f.write(" ")
-        f.write(len(tokens))
-        record = [url, len(tokens)]
-    f.close()
-    return record
-
-# Tokenizes alphanumeric characters, ignoring non-english words
-def tolkiens(text):
-    text_words = [] 
-    text = re.split("[\W_À-ÖØ-öø-ÿ]+", text) #Split on nonalphanumerics to create list of words in line.
-    for word in text: 
-        token = word.lower() #Make lowercase so the capitalization does not matter.
-        if token != '' and token.isascii() == True:
-            text_words.append(token) #Adds to list
-    return text_words
-
-def mostCommon(text):
-    #create a map and read file containing past word frequencies
-    words = {}
-    with open("words.txt", "r") as f:
-        lines = f.readlines()
-        for line in lines:
-            word_count = re.findall("\w+", line)
-            # File words.txt format is word <space> num
-            words[word_count[0]] = int(word_count[1])
-    f.close()
-
-    # After file is read proceed to add/update words and their counts
-    tokenList = tolkiens(text)
-    for token in tokenList:
-        if token not in words:
-            words[token] = 0
-        words[token] += 1
-    
-    # Sort the dictionary by value. if there is a tie, by alphabetical
-    words = dict(sorted(words.items(), key = lambda key: key[0], 
-    reverse=True))
-    words = dict(sorted(words.items(), key = lambda item: item[1], 
-    reverse=True))
-
-    # Overwrite to the file starting with words with highest freq
-    with open("words.txt", "w") as f:
-        for line in words:
-            f.write(line)
-            f.write(" ")
-            f.write(words[line])
-            f.write("\n")
-    f.close()
-    
-    # Creates a list of the top 50 most common words
-    top50 = []
-    i = 0
-    for key in words:
-        if i == 50:
-            break
-        top50.append(key)
-        i += 1
-    return top50
+import helpers
 
 def scraper(url, resp):
     links = extract_next_links(url, resp)
@@ -102,13 +34,13 @@ def extract_next_links(url, resp):
         links = soup.find_all("a", href=True)
         text = soup.getText()
     else:
-        return
+        return []
 
     # returns most top 50 most common words thus far.
-    top50 = mostCommon(text)
+    top50 = helpers.mostCommon(text)
 
     # Returns the url with the most words
-    url_with_most_words = longestPage(resp.url, text)
+    url_with_most_words = helpers.longestPage(resp.raw_response.url, text)
 
     # We will use the is_valid url function in this loop to make sure
     # we do not add bad urls or previously visited urls. 
@@ -116,10 +48,9 @@ def extract_next_links(url, resp):
     new_urls = {}
     for link in links:
         str_link = link.get('href')
-        x = urlparse.urldefrag(str_link)
-        str_link = x[0]
-        if str_link not in new_urls and str_link not in new_urls:
-            if str_link not in prev_urls and str_link not in new_urls:
+        str_link = str_link.split('#')[0]
+        if str_link not in prev_urls and str_link not in new_urls:
+            if is_valid(str_link):
                 new_urls[str_link] = 1
     
     # Open file again and denote to append to the urls.txt file
@@ -130,11 +61,10 @@ def extract_next_links(url, resp):
     f.close()
 
     # Store total unique pages
-    totalUniquePages = len(prev_urls.update(new_urls))
-    with open("uniquePages.txt", 'w') as f:
-        f.write(totalUniquePages)
+    # totalUniquePages = len(prev_urls.update(new_urls))
+    #with open("uniquePages.txt", 'w') as f:
+    #    f.write(totalUniquePages)
     
-
     return new_urls
 
 def is_valid(url):
@@ -145,13 +75,15 @@ def is_valid(url):
         parsed = urlparse(url)
         if parsed.scheme not in set(["http", "https"]):
             return False
+        if parsed.hostname == None:
+            return False
         if not parsed.hostname.endswith(('ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', '.stat.uci.edu')):
             return False
         return not re.match(
             r".*\.(css|js|bmp|gif|jpe?g|ico"
             + r"|png|tiff?|mid|mp2|mp3|mp4"
             + r"|wav|avi|mov|mpeg|ram|m4v|mkv|ogg|ogv|pdf"
-            + r"|ps|eps|tex|ppt|pptx|doc|docx|xls|xlsx|names"
+            + r"|ps|eps|tex|ppt|pptx|ppsx|doc|docx|xls|xlsx|names"
             + r"|data|dat|exe|bz2|tar|msi|bin|7z|psd|dmg|iso"
             + r"|epub|dll|cnf|tgz|sha1"
             + r"|thmx|mso|arff|rtf|jar|csv"
