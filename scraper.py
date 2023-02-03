@@ -77,7 +77,7 @@ def is_valid(url):
             return False
         if parsed.hostname == None:
             return False
-        if not parsed.hostname.endswith(('ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', '.stat.uci.edu')):
+        if not parsed.hostname.endswith(('ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', 'stat.uci.edu')):
             return False
         return not re.match(
             r".*\.(css|js|bmp|gif|jpe?g|ico"
