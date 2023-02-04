@@ -95,7 +95,7 @@ def is_valid(url):
                 + r'|/png/|/tiff?/|/mid/|/mp2/|/mp3/|/mp4/'
                 + r'|/wav/|/avi/|/mov/|/mpeg/|/ram/|/m4v/|/mkv/|/ogg/|/ogv/|/pdf/|/wp-content/'
                 + r'|/ps/|/eps/|/tex/|/ppt/|/pptx/|/ppsx/|/doc/|/docx/|/xls/|/xlsx/|/names/'
-                + r'|/data/|/dat/|/exe/|/bz2/|/tar/|/msi/|/bin/|/7z/|/psd/|/dmg/|/iso/'
+                + r'|/data/|/dat/|/exe/|/bz2/|/tar/|/msi/|/bin/|/7z/|/psd/|/dmg/|/iso/|/wp-json/'
                 + r'|/epub/|/dll/|/cnf/|/tgz/|/sha1/'
                 + r'|/thmx/|/mso/|/arff/|/rtf/|/jar/|/csv/'
                 + r'|/rm/|/smil/|/wmv/|/swf/|/wma/|/zip/|/rar/|/gz/)', parsed.path.lower()) and not re.match(
@@ -106,7 +106,8 @@ def is_valid(url):
                     + r"|data|dat|exe|bz2|tar|msi|bin|7z|psd|dmg|iso"
                     + r"|epub|dll|cnf|tgz|sha1"
                     + r"|thmx|mso|arff|rtf|jar|csv"
-                    + r"|rm|smil|wmv|swf|wma|zip|rar|gz)$", parsed.query.lower())
+                    + r"|rm|smil|wmv|swf|wma|zip|rar|gz)$", parsed.query.lower()) and not re.search(
+                        r'(ical=|share=)', parsed.query.lower())
 
     except TypeError:
         print ("TypeError for ", parsed)
