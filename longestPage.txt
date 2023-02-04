@@ -1,2 +1,2 @@
-https://www.informatics.uci.edu/files/pdf/InformaticsBrochure-March2018
-1099009
+https://www.ics.uci.edu/~shantas/publications/20-secret-sharing-aggregation-TKDE-shantanu
+513917

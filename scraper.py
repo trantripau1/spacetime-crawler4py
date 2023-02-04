@@ -26,7 +26,9 @@ def extract_next_links(url, resp):
     with open("urls.txt", "r") as f:
         lines = f.readlines()
         for line in lines:
-            prev_urls[line.strip()] = 1
+            line = line.strip()
+            if line is not None:
+                prev_urls[line] = 1
 
     #parse webpage and find all links and text
     if resp.status == 200:
@@ -61,10 +63,11 @@ def extract_next_links(url, resp):
     f.close()
 
     # Store total unique pages
-    # totalUniquePages = len(prev_urls.update(new_urls))
-    #with open("uniquePages.txt", 'w') as f:
-    #    f.write(totalUniquePages)
-    
+    totalUniquePages = len(prev_urls) + len(new_urls) + 3
+
+    with open("uniquePages.txt", 'w') as f:
+        f.write(str(totalUniquePages))
+        
     return new_urls
 
 def is_valid(url):
@@ -82,7 +85,7 @@ def is_valid(url):
         return not re.match(
             r".*\.(css|js|bmp|gif|jpe?g|ico"
             + r"|png|tiff?|mid|mp2|mp3|mp4"
-            + r"|wav|avi|mov|mpeg|ram|m4v|mkv|ogg|ogv|pdf"
+            + r"|wav|avi|mov|mpeg|ram|m4v|mkv|ogg|ogv|pdf|wp-json"
             + r"|ps|eps|tex|ppt|pptx|ppsx|doc|docx|xls|xlsx|names"
             + r"|data|dat|exe|bz2|tar|msi|bin|7z|psd|dmg|iso"
             + r"|epub|dll|cnf|tgz|sha1"
@@ -98,13 +101,12 @@ def is_valid(url):
                 + r'|/rm/|/smil/|/wmv/|/swf/|/wma/|/zip/|/rar/|/gz/)', parsed.path.lower()) and not re.match(
                     r".*\.(css|js|bmp|gif|jpe?g|ico"
                     + r"|png|tiff?|mid|mp2|mp3|mp4"
-                    + r"|wav|avi|mov|mpeg|ram|m4v|mkv|ogg|ogv|pdf"
+                    + r"|wav|avi|mov|mpeg|ram|m4v|mkv|ogg|ogv|pdf|ical|share="
                     + r"|ps|eps|tex|ppt|pptx|ppsx|doc|docx|xls|xlsx|names"
                     + r"|data|dat|exe|bz2|tar|msi|bin|7z|psd|dmg|iso"
                     + r"|epub|dll|cnf|tgz|sha1"
                     + r"|thmx|mso|arff|rtf|jar|csv"
                     + r"|rm|smil|wmv|swf|wma|zip|rar|gz)$", parsed.query.lower())
-                )
 
     except TypeError:
         print ("TypeError for ", parsed)

@@ -33,13 +33,23 @@ def longestPage(url, text):
 
     return largest
 
-# Tokenizes alphanumeric characters, ignoring non-english words
+# Tokenizes alphanumeric characters, ignoring non-english words 
 def tolkiens(text):
-    text_words = [] 
+    # Retrieve stopwords list
+    stopwords = set()
+    with open("stopwords.txt", 'r') as f:
+        lines = f.readlines()
+        for line in lines:
+            line = line.strip()
+            if line is not None:
+                stopwords.add(line)
+    f.close()
+
+    text_words = []
     text = re.split("[\W_À-ÖØ-öø-ÿ]+", text) #Split on nonalphanumerics to create list of words in line.
     for word in text: 
         token = word.lower() #Make lowercase so the capitalization does not matter.
-        if token != '' and token.isascii() == True:
+        if token != '' and token.isascii() == True and token not in stopwords:
             text_words.append(token) #Adds to list
     return text_words
 
