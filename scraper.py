@@ -67,7 +67,7 @@ def extract_next_links(url, resp):
 
     with open("uniquePages.txt", 'w') as f:
         f.write(str(totalUniquePages))
-        
+
     return new_urls
 
 def is_valid(url):
@@ -85,7 +85,7 @@ def is_valid(url):
         return not re.match(
             r".*\.(css|js|bmp|gif|jpe?g|ico"
             + r"|png|tiff?|mid|mp2|mp3|mp4"
-            + r"|wav|avi|mov|mpeg|ram|m4v|mkv|ogg|ogv|pdf|wp-json"
+            + r"|wav|avi|mov|mpeg|ram|m4v|mkv|ogg|ogv|pdf|wp-json|odc"
             + r"|ps|eps|tex|ppt|pptx|ppsx|doc|docx|xls|xlsx|names"
             + r"|data|dat|exe|bz2|tar|msi|bin|7z|psd|dmg|iso"
             + r"|epub|dll|cnf|tgz|sha1"
@@ -93,7 +93,7 @@ def is_valid(url):
             + r"|rm|smil|wmv|swf|wma|zip|rar|gz)$", parsed.path.lower()) and not re.search(
                 r'(/css/|/js/|/bmp/|/gif/|/jpe?g/|/ico/'
                 + r'|/png/|/tiff?/|/mid/|/mp2/|/mp3/|/mp4/'
-                + r'|/wav/|/avi/|/mov/|/mpeg/|/ram/|/m4v/|/mkv/|/ogg/|/ogv/|/pdf/'
+                + r'|/wav/|/avi/|/mov/|/mpeg/|/ram/|/m4v/|/mkv/|/ogg/|/ogv/|/pdf/|/wp-content/'
                 + r'|/ps/|/eps/|/tex/|/ppt/|/pptx/|/ppsx/|/doc/|/docx/|/xls/|/xlsx/|/names/'
                 + r'|/data/|/dat/|/exe/|/bz2/|/tar/|/msi/|/bin/|/7z/|/psd/|/dmg/|/iso/'
                 + r'|/epub/|/dll/|/cnf/|/tgz/|/sha1/'
@@ -101,7 +101,7 @@ def is_valid(url):
                 + r'|/rm/|/smil/|/wmv/|/swf/|/wma/|/zip/|/rar/|/gz/)', parsed.path.lower()) and not re.match(
                     r".*\.(css|js|bmp|gif|jpe?g|ico"
                     + r"|png|tiff?|mid|mp2|mp3|mp4"
-                    + r"|wav|avi|mov|mpeg|ram|m4v|mkv|ogg|ogv|pdf|ical|share="
+                    + r"|wav|avi|mov|mpeg|ram|m4v|mkv|ogg|ogv|pdf|ical|share=|odc"
                     + r"|ps|eps|tex|ppt|pptx|ppsx|doc|docx|xls|xlsx|names"
                     + r"|data|dat|exe|bz2|tar|msi|bin|7z|psd|dmg|iso"
                     + r"|epub|dll|cnf|tgz|sha1"
