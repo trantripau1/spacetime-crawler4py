@@ -100,3 +100,20 @@ def mostCommon(text):
         top50.append(key)
         i += 1
     return top50
+
+def getSubdomains():
+    subdomains = {}
+    with open('urls.txt', 'r') as f:
+        for line in f:
+            url = urlparse(line)
+            subdomain = url.hostname.split('.')[0]
+            if not 'https://' + subdomain + '.ics.uci.edu' in subdomains:
+                subdomains['https://' + subdomain + '.ics.uci.edu'] = 1;
+            elif 'https://' + subdomain + '.ics.uci.edu' in subdomains:
+                subdomains['https://' + subdomain + '.ics.uci.edu'] += 1
+
+    subdomains = dict(sorted(subdomains.items(), key = lambda key: key[0]))
+    subdomains = dict(sorted(subdomains.items(), key = lambda item: item[1], reverse=True))  
+        
+    return subdomains
+
