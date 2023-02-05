@@ -38,4 +38,3 @@ print( not re.match(
                     + r"|rm|smil|wmv|swf|wma|zip|rar|gz)$", parsed.query.lower()))
 
 req = requests.get("http://sli.ics.uci.edu/")
-print(req.status_code)
