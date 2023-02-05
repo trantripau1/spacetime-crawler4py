@@ -116,4 +116,3 @@ def getSubdomains():
     subdomains = dict(sorted(subdomains.items(), key = lambda item: item[1], reverse=True))  
         
     return subdomains
-

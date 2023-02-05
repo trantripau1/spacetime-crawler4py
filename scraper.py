@@ -21,6 +21,14 @@ def extract_next_links(url, resp):
     #         resp.raw_response.content: the content of the page!
     # Return a list with the hyperlinks (as strings) scrapped from resp.raw_response.content
 
+    #parse webpage and find all links and text
+    if resp.status == 200:
+        soup = BeautifulSoup(resp.raw_response.content, 'html.parser')
+        links = soup.find_all("a", href=True)
+        text = soup.getText()
+    else:
+        return []
+        
     #create a prev_urls to read in stored links from previous searches.
     prev_urls = {}
     with open("urls.txt", "r") as f:
@@ -29,20 +37,6 @@ def extract_next_links(url, resp):
             line = line.strip()
             if line is not None:
                 prev_urls[line] = 1
-
-    #parse webpage and find all links and text
-    if resp.status == 200:
-        soup = BeautifulSoup(resp.raw_response.content, 'html.parser')
-        links = soup.find_all("a", href=True)
-        text = soup.getText()
-    else:
-        return []
-
-    # returns most top 50 most common words thus far.
-    top50 = helpers.mostCommon(text)
-
-    # Returns the url with the most words
-    url_with_most_words = helpers.longestPage(resp.raw_response.url, text)
 
     # We will use the is_valid url function in this loop to make sure
     # we do not add bad urls or previously visited urls. 
@@ -61,6 +55,12 @@ def extract_next_links(url, resp):
             f.write(line)
             f.write('\n')
     f.close()
+
+    # returns most top 50 most common words thus far.
+    top50 = helpers.mostCommon(text)
+
+    # Returns the url with the most words
+    url_with_most_words = helpers.longestPage(resp.raw_response.url, text)
 
     # Store total unique pages
     totalUniquePages = len(prev_urls) + len(new_urls) + 3
@@ -94,7 +94,7 @@ def is_valid(url):
                 r'(/css/|/js/|/bmp/|/gif/|/jpe?g/|/ico/'
                 + r'|/png/|/tiff?/|/mid/|/mp2/|/mp3/|/mp4/'
                 + r'|/wav/|/avi/|/mov/|/mpeg/|/ram/|/m4v/|/mkv/|/ogg/|/ogv/|/pdf/|/wp-content/'
-                + r'|/ps/|/eps/|/tex/|/ppt/|/pptx/|/ppsx/|/doc/|/docx/|/xls/|/xlsx/|/names/'
+                + r'|/ps/|/eps/|/tex/|/ppt/|/pptx/|/ppsx/|/doc/|/docx/|/xls/|/xlsx/|/names/|/wp-login'
                 + r'|/data/|/dat/|/exe/|/bz2/|/tar/|/msi/|/bin/|/7z/|/psd/|/dmg/|/iso/|/wp-json/'
                 + r'|/epub/|/dll/|/cnf/|/tgz/|/sha1/'
                 + r'|/thmx/|/mso/|/arff/|/rtf/|/jar/|/csv/'
