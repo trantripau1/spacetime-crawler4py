@@ -28,7 +28,7 @@ def extract_next_links(url, resp):
         text = soup.getText()
     else:
         return []
-        
+
     #create a prev_urls to read in stored links from previous searches.
     prev_urls = {}
     with open("urls.txt", "r") as f:
@@ -107,7 +107,7 @@ def is_valid(url):
                     + r"|epub|dll|cnf|tgz|sha1"
                     + r"|thmx|mso|arff|rtf|jar|csv"
                     + r"|rm|smil|wmv|swf|wma|zip|rar|gz)$", parsed.query.lower()) and not re.search(
-                        r'(ical=|share=)', parsed.query.lower())
+                        r'(ical=|share=|action=)', parsed.query.lower())
 
     except TypeError:
         print ("TypeError for ", parsed)
