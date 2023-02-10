@@ -787,7 +787,6 @@ https://cml.ics.uci.edu/2012/09/fall-2012/
 http://www.ics.uci.edu/~djp3
 http://www.ics.uci.edu/~lboyles/
 http://www.ics.uci.edu/~babaks/Site/Codes.html
-http://luci.ics.uci.edu/LUCIinterace.html
 https://cml.ics.uci.edu/2012/08/2012_uaidomination/
 https://cml.ics.uci.edu/tag/news/
 https://cml.ics.uci.edu/2012/07/2012_fellowships/
@@ -4606,8 +4605,6 @@ http://www.ics.uci.edu/~pfbaldi
 http://www.physics.uci.edu/dynamicsdays2005/abstracts.html
 http://computableplant.ics.uci.edu/alphasite/index.html
 https://emj.ics.uci.edu/?page_id=67
-http://computableplant.ics.uci.edu/papers/2006/plcb-02-12-12_Wold.pdf 
-http://computableplant.ics.uci.edu/papers/2006/Yeast_ANN_PLOSCB06.pdf 
 http://computableplant.ics.uci.edu/papers/2005/CVPR-2005-Abstract.html
 https://emj.ics.uci.edu/?page_id=109
 http://computableplant.ics.uci.edu/papers/
@@ -4973,10 +4970,6 @@ http://www.physics.uci.edu/%7Eastroclb/contacts.html
 http://www.physics.uci.edu/%7Eastroclb/links.html
 http://www.physics.uci.edu/%7eobservat/
 http://www.physics.uci.edu/%7esps/
-http://www.physics.uci.edu/%7Eastroclb/events/lunar_eclipse03/lunar_eclipse03.html
-http://www.physics.uci.edu/%7Eastroclb/events/pinos/pinos.html
-http://www.physics.uci.edu/%7Eastroclb/eclipse/index.html
-http://www.physics.uci.edu/%7Eastroclb/visit_night/visit_night.html
 https://www.physics.uci.edu/node/13784
 https://www.physics.uci.edu/node/13646
 https://www.cs.uci.edu/gene-tsudik-and-co-authors-receive-2020-jean-claude-laprie-award/
@@ -5060,7 +5053,6 @@ http://www-db.ics.uci.edu:8000/webmars
 http://www-db.ics.uci.edu:8006/
 http://www-db.ics.uci.edu/pages/raccoon/
 http://www-db.ics.uci.edu/pages/flamingo/
-http://www.ics.uci.edu/~raccoon/
 https://chenli.ics.uci.edu
 https://grape.ics.uci.edu/wiki/asterix/wiki/cs122a-2018-spring
 http://chenli.ics.uci.edu/
@@ -7371,7 +7363,6 @@ https://edgelab.ics.uci.edu/talk/
 https://edgelab.ics.uci.edu/news/
 https://edgelab.ics.uci.edu/sample-page/
 https://www.ics.uci.edu/~habibif/
-https://edgelab.ics.uci.edu/wp-admin/
 https://www.ics.uci.edu/~pattis/ICS-33/
 https://www.ics.uci.edu/~pattis/ICS-46/
 https://ics.uci.edu/~achio/
@@ -7673,7 +7664,6 @@ http://www.ics.uci.edu/Arcadia/Teamware/demo/instance.html
 http://www.ics.uci.edu/Arcadia/Teamware/demo/attach.html
 http://www.ics.uci.edu/Arcadia/Teamware/demo/category2.html
 http://www.ics.uci.edu/Arcadia/Teamware/demo/help2.html
-http://www.ics.uci.edu/pub/endeavors/
 http://www.ics.uci.edu/IRUS/css.html
 https://www.informatics.uci.edu/2019/05/page/2/
 https://www.informatics.uci.edu/2019/10/page/2/
@@ -9064,8 +9054,6 @@ http://www.ics.uci.edu/%7Emagda/Courses/ics167/demo_2
 http://www.ics.uci.edu/%7Emagda/Courses/ics167/demo_3
 http://www.ics.uci.edu/%7Emagda/Courses/ics167/chatroom_demo
 http://www.ics.uci.edu/%7Erkwang/Winter_2016_ICS167/ics167coursepage.html
-http://www.ics.uci.edu/%7Emagda/Courses/ics167/COGSlab_rules.html
-http://www.ics.uci.edu/%7Emagda/Courses/ics167/Project_Rules.html
 http://www.ics.uci.edu/%7Emagda/ics_232P/outlineP.html
 http://www.ics.uci.edu/%7Emagda/ics_232P/scheduleP.html
 http://www.ics.uci.edu/%7Emagda/ics_232P/announceP.html

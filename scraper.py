@@ -7,7 +7,7 @@ import helpers
 
 def scraper(url, resp):
     links = extract_next_links(url, resp)
-    return [link for link in links if is_valid(link)]
+    return links
 
 #reponse = servers reponse to the HTTP request.
 def extract_next_links(url, resp):
@@ -26,6 +26,12 @@ def extract_next_links(url, resp):
         soup = BeautifulSoup(resp.raw_response.content, 'html.parser')
         links = soup.find_all("a", href=True)
         text = soup.getText()
+        if len(text) < 200:
+            return []
+        with open('status.txt', 'a') as f:
+            f.write(url.split("#")[0])
+            f.write('\n')
+        f.close()
     else:
         return []
 
@@ -56,17 +62,11 @@ def extract_next_links(url, resp):
             f.write('\n')
     f.close()
 
-    # returns most top 50 most common words thus far.
-    top50 = helpers.mostCommon(text)
+    # updates/adds to words.txt the words found and their frequencies
+    helpers.mostCommon(text)
 
-    # Returns the url with the most words
-    url_with_most_words = helpers.longestPage(resp.raw_response.url, text)
-
-    # Store total unique pages
-    totalUniquePages = len(prev_urls) + len(new_urls) + 3
-
-    with open("uniquePages.txt", 'w') as f:
-        f.write(str(totalUniquePages))
+    # records and writes to longestPage.txt the page with the most words
+    helpers.longestPage(resp.raw_response.url, text)
 
     return new_urls
 
@@ -82,7 +82,7 @@ def is_valid(url):
             return False
         if not parsed.hostname.endswith(('ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', 'stat.uci.edu')):
             return False
-        return not re.match(
+        if re.match( 
             r".*\.(css|js|bmp|gif|jpe?g|ico"
             + r"|png|tiff?|mid|mp2|mp3|mp4"
             + r"|wav|avi|mov|mpeg|ram|m4v|mkv|ogg|ogv|pdf|wp-json|odc"
@@ -90,24 +90,35 @@ def is_valid(url):
             + r"|data|dat|exe|bz2|tar|msi|bin|7z|psd|dmg|iso"
             + r"|epub|dll|cnf|tgz|sha1"
             + r"|thmx|mso|arff|rtf|jar|csv"
-            + r"|rm|smil|wmv|swf|wma|zip|rar|gz)$", parsed.path.lower()) and not re.search(
-                r'(/css/|/js/|/bmp/|/gif/|/jpe?g/|/ico/'
-                + r'|/png/|/tiff?/|/mid/|/mp2/|/mp3/|/mp4/'
-                + r'|/wav/|/avi/|/mov/|/mpeg/|/ram/|/m4v/|/mkv/|/ogg/|/ogv/|/pdf/|/wp-content/'
-                + r'|/ps/|/eps/|/tex/|/ppt/|/pptx/|/ppsx/|/doc/|/docx/|/xls/|/xlsx/|/names/|/wp-login'
-                + r'|/data/|/dat/|/exe/|/bz2/|/tar/|/msi/|/bin/|/7z/|/psd/|/dmg/|/iso/|/wp-json/'
-                + r'|/epub/|/dll/|/cnf/|/tgz/|/sha1/'
-                + r'|/thmx/|/mso/|/arff/|/rtf/|/jar/|/csv/'
-                + r'|/rm/|/smil/|/wmv/|/swf/|/wma/|/zip/|/rar/|/gz/)', parsed.path.lower()) and not re.match(
-                    r".*\.(css|js|bmp|gif|jpe?g|ico"
-                    + r"|png|tiff?|mid|mp2|mp3|mp4"
-                    + r"|wav|avi|mov|mpeg|ram|m4v|mkv|ogg|ogv|pdf|ical|share=|odc"
-                    + r"|ps|eps|tex|ppt|pptx|ppsx|doc|docx|xls|xlsx|names"
-                    + r"|data|dat|exe|bz2|tar|msi|bin|7z|psd|dmg|iso"
-                    + r"|epub|dll|cnf|tgz|sha1"
-                    + r"|thmx|mso|arff|rtf|jar|csv"
-                    + r"|rm|smil|wmv|swf|wma|zip|rar|gz)$", parsed.query.lower()) and not re.search(
-                        r'(ical=|share=|action=)', parsed.query.lower())
+            + r"|rm|smil|wmv|swf|wma|zip|rar|gz)$", parsed.path.lower()):
+            return False
+        if re.search( 
+            r'(/css/|/js/|/bmp/|/gif/|/jpe?g/|/ico/'
+            + r'|/png/|/tiff?/|/mid/|/mp2/|/mp3/|/mp4/'
+            + r'|/wav/|/avi/|/mov/|/mpeg/|/ram/|/m4v/|/mkv/|/ogg/|/ogv/|pdf'
+            + r'|/ps/|/eps/|/tex/|/ppt/|/pptx/|/ppsx/|/doc/|/docx/|/xls/|/xlsx/|/names/|/wp-'
+            + r'|/data/|/dat/|/exe/|/bz2/|/tar/|/msi/|/bin/|/7z/|/psd/|/dmg/|/iso/'
+            + r'|/epub/|/dll/|/cnf/|/tgz/|/sha1/|wics.ics.uci.edu/events|'
+            + r'|/thmx/|/mso/|/arff/|/rtf/|/jar/|/csv/|wics.ics.uci.edu/wics-hosts'
+            + r'|/rm/|/smil/|/wmv/|/swf/|/wma/|/zip/|/rar/|/gz/)', parsed.path.lower()):
+            return False
+        if re.match( 
+            r".*\.(css|js|bmp|gif|jpe?g|ico"
+            + r"|png|tiff?|mid|mp2|mp3|mp4"
+            + r"|wav|avi|mov|mpeg|ram|m4v|mkv|ogg|ogv|pdf|ical|share=|odc"
+            + r"|ps|eps|tex|ppt|pptx|ppsx|doc|docx|xls|xlsx|names"
+            + r"|data|dat|exe|bz2|tar|msi|bin|7z|psd|dmg|iso"
+            + r"|epub|dll|cnf|tgz|sha1"
+            + r"|thmx|mso|arff|rtf|jar|csv"
+            + r"|rm|smil|wmv|swf|wma|zip|rar|gz)$", parsed.query.lower()):
+            return False
+        if re.search(
+            r'(ical=|share=|action=)', parsed.query.lower()):
+            return False
+        if parsed.hostname.endswith(('wics.ics.uci.edu')):
+            if re.search(r'(/events/|/wics-hosts|/letter-of)', parsed.path.lower()):
+                return False
+        return True
 
     except TypeError:
         print ("TypeError for ", parsed)
