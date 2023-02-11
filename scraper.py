@@ -7,7 +7,7 @@ import helpers
 
 def scraper(url, resp):
     links = extract_next_links(url, resp)
-    return links
+    return [link for link in links if is_valid(link)]
 
 #reponse = servers reponse to the HTTP request.
 def extract_next_links(url, resp):
@@ -26,8 +26,6 @@ def extract_next_links(url, resp):
         soup = BeautifulSoup(resp.raw_response.content, 'html.parser')
         links = soup.find_all("a", href=True)
         text = soup.getText()
-        if len(text) < 200:
-            return []
         with open('status.txt', 'a') as f:
             f.write(url.split("#")[0])
             f.write('\n')
@@ -98,8 +96,8 @@ def is_valid(url):
             + r'|/wav/|/avi/|/mov/|/mpeg/|/ram/|/m4v/|/mkv/|/ogg/|/ogv/|pdf'
             + r'|/ps/|/eps/|/tex/|/ppt/|/pptx/|/ppsx/|/doc/|/docx/|/xls/|/xlsx/|/names/|/wp-'
             + r'|/data/|/dat/|/exe/|/bz2/|/tar/|/msi/|/bin/|/7z/|/psd/|/dmg/|/iso/'
-            + r'|/epub/|/dll/|/cnf/|/tgz/|/sha1/|wics.ics.uci.edu/events|'
-            + r'|/thmx/|/mso/|/arff/|/rtf/|/jar/|/csv/|wics.ics.uci.edu/wics-hosts'
+            + r'|/epub/|/dll/|/cnf/|/tgz/|/sha1/'
+            + r'|/thmx/|/mso/|/arff/|/rtf/|/jar/|/csv/'
             + r'|/rm/|/smil/|/wmv/|/swf/|/wma/|/zip/|/rar/|/gz/)', parsed.path.lower()):
             return False
         if re.match( 
